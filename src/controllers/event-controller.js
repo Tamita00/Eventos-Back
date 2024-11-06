@@ -157,19 +157,17 @@ router.put('', async (req, res) => {
     }
 });
 
-router.delete('/:id', async (req, res) => { 
-    let respuesta;
-    if (v.isANumber(req.params.id)) {
-        try {
-            await svc.deleteByIdAsync(req.params.id);
-            respuesta = res.status(200).send("Ok.");
-        } catch (error) {
-            respuesta = res.status(500).send(error.message);
-        }
-    } else {
-        respuesta = res.status(400).send(`Datos inválidos.`);
+router.patch('/event/:id', async (req, res) => {
+    const eventId = req.params.id;  // El id se toma de la URL
+    const eventData = req.body;     // Los datos a actualizar vienen del cuerpo
+
+    try {
+        let updatedEvent = await svc.updateEvent(eventId, eventData);
+        return res.status(200).json(updatedEvent);
+    } catch (error) {
+        console.error(error);
+        return res.status(500).send("Error en la actualización del evento.");
     }
-    return respuesta;
 });
 
 export default router;
