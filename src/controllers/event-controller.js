@@ -40,14 +40,16 @@ router.post('/:id/enrollment', am.AuthMiddleware, async(req, res) => {
         return res.status(400).send("Ya te registraste para este evento antes.");
     }
 
-    svc_enrollment.createAsync({
+    await svc_enrollment.createAsync({
         "id_event": event.id,
         "id_user": user.id,
         "description": event.description,
-        "registration_date_time": registration_date_time,
+        "registration_date_time": event.registration_date_time,
     });
+
     return res.status(201).send("Te registraste.");
 });
+
 
 router.get('', async(req, res) => {
     const returnArray = await svc.getAll(req.query.pagina, req.query.limit);
@@ -112,7 +114,6 @@ router.delete('/:id', am.AuthMiddleware, async (req, res) => {
     }
     return deleted;
 })
-//no estamos usando el validator, pero lo importamos por alguna razón
 
 router.get('/enrollment/:id', async (req, res) =>{
     let respuesta;
@@ -130,12 +131,11 @@ router.get('/enrollment/:id', async (req, res) =>{
 
 router.put('', async (req, res) => {
     try {
-        const eventLocation = await svc_el.getByIdAsync(req.body.id_event_location);
-        console.log('event location', eventLocation)
-        console.log('req.body: \n', req.body)
+        const event = await svc.getById(req.body.id);
+        const eventLocation = await svc_el.getByIdAsync(req.body.id_event_location)
         
-        if (!req.body.id_event_location) {
-            return res.status(400).send("Bad request, id de la localidad no existe en el contexto actual");
+        if (!req.body.id) {
+            return res.status(400).send("Bad request, id del evento no existe en el contexto actual");
         }
 
         if (req.body.name == null || req.body.name.length < 3 || eventLocation.full_address == null || eventLocation.full_address.length < 3) {
@@ -157,17 +157,19 @@ router.put('', async (req, res) => {
     }
 });
 
-router.patch('/event/:id', async (req, res) => {
-    const eventId = req.params.id;  // El id se toma de la URL
-    const eventData = req.body;     // Los datos a actualizar vienen del cuerpo
-
-    try {
-        let updatedEvent = await svc.updateEvent(eventId, eventData);
-        return res.status(200).json(updatedEvent);
-    } catch (error) {
-        console.error(error);
-        return res.status(500).send("Error en la actualización del evento.");
+router.delete('/:id', async (req, res) => { 
+    let respuesta;
+    if (v.isANumber(req.params.id)) {
+        try {
+            await svc.deleteByIdAsync(req.params.id);
+            respuesta = res.status(200).send("Ok.");
+        } catch (error) {
+            respuesta = res.status(500).send(error.message);
+        }
+    } else {
+        respuesta = res.status(400).send(`Datos inválidos.`);
     }
+    return respuesta;
 });
 
 export default router;

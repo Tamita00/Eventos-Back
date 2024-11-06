@@ -31,11 +31,9 @@ export default class EventService {
         return created;
     }
 
-    updateEvent = async (eventId, eventData) => {
+    updateEvent = async (entity) => {
         const repo = new EventRepository();
-        console.log('entity', entity);
-        const updated = await repo.updateEvent(eventId, eventData);
-        console.log('updated:', updated);
+        const updated = await repo.updateEvent(entity);
         return updated;
     }
 

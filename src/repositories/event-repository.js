@@ -153,14 +153,14 @@ export default class EventRepository {
         return created;
     }
     
-    updateEvent = async(eventId, eventData) => {
-        let updated = await dbh.requestOne(`
-        UPDATE public.events
-        SET name = $1, description = $2, id_event_category = $3, id_event_location = $4, start_date = $5, duration_in_minutes = $6, price = $7, enabled_for_enrollment = $8, max_assistance = $9, id_creator_user = $10
-        WHERE id = $11`,
-        [eventData.name, eventData.description, eventData.id_event_category, eventData.id_event_location, eventData.start_date, eventData.duration_in_minutes, eventData.price, eventData.enabled_for_enrollment, eventData.max_assistance, eventData.id_creator_user, eventId]);
-        return updated;
-}
+    updateEvent = async(entity) => {
+            let updated = await dbh.requestOne(`
+            UPDATE public.events
+            SET name = $1, description = $2, id_event_category = $3, id_event_location = $4, start_date = $5, duration_in_minutes = $6, price = $7, enabled_for_enrollment = $8, max_assistance = $9, id_creator_user = $10
+            WHERE id = $11`,
+            [entity.name, entity.description, entity.id_event_category, entity.id_event_location, entity.start_date, entity.duration_in_minutes, entity.price, entity.enabled_for_enrollment, entity.max_assistance, entity.id_creator_user, entity.id]);
+            return updated;
+    }
 
     deleteByIdAsync = async (id) => 
     {
