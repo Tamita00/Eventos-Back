@@ -129,11 +129,13 @@ router.get('/enrollment/:id', async (req, res) =>{
 });
 
 
-router.put('/eventos', async (req, res) => {
+router.put('', async (req, res) => {
+    console.log("entro")
+    console.log(req.body);
     try {
-        const event = await svc.getById(req.body.id);
+        // const event = await svc.getById(req.event);
         const eventLocation = await svc_el.getByIdAsync(req.body.id_event_location)
-        
+       
         if (!req.body.id) {
             return res.status(400).send("Bad request, id del evento no existe en el contexto actual");
         }
@@ -149,6 +151,7 @@ router.put('/eventos', async (req, res) => {
         if(req.body.price < 0 || req.body.duration_in_minutes < 0){
             return res.status(400).send("Bad request, la duración del evento o el precio son menores que 0");
         }
+        console.log("entra al try");
         let updatedEntity = await svc.updateEvent(req.body);
         return res.status(200).send("Evento actualizado.");
     } catch(error) {

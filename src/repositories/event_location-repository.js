@@ -8,6 +8,7 @@ export default class EventLocationRepository
     }
 
     getByIdAsync = async (id) => {
+        console.log("llego a getByIdAsync");
         return dbh.requestOne('SELECT * FROM public.event_locations WHERE id = $1;', [id]);
     }
 
