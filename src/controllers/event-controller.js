@@ -130,7 +130,7 @@ router.get('/enrollment/:id', async (req, res) =>{
 
 
 router.put('', async (req, res) => {
-    console.log("entro")
+    console.log("entro al put")
     console.log(req.body);
     try {
         // const event = await svc.getById(req.event);
