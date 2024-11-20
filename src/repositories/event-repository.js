@@ -153,46 +153,15 @@ export default class EventRepository {
         return created;
     }
     
-    updateEvent = async (entity) => {
-        console.log("lo que llega a updateEvent:" + entity.name, 
-            entity.description);
-        try {
-            console.log("entro al try de updateEvent");
-            console.log("lo que llega a updateEvent:" + entity.name, 
-            entity.description);
+    updateEvent = async(entity) => {
             let updated = await dbh.requestOne(`
-                UPDATE public.events
-                SET name = $1, 
-                    description = $2, 
-                    id_event_category = $3, 
-                    id_event_location = $4, 
-                    start_date = $5, 
-                    duration_in_minutes = $6, 
-                    price = $7, 
-                    enabled_for_enrollment = $8, 
-                    max_assistance = $9, 
-                    id_creator_user = $10
-                WHERE id = $11
-            `, [
-                entity.name, 
-                entity.description, 
-                entity.id_event_category, 
-                entity.id_event_location, 
-                entity.start_date, 
-                entity.duration_in_minutes, 
-                entity.price, 
-                entity.enabled_for_enrollment, 
-                entity.max_assistance, 
-                entity.id_creator_user, 
-                entity.id
-            ]);
+            UPDATE public.events
+            SET name = $1, description = $2, id_event_category = $3, id_event_location = $4, start_date = $5, duration_in_minutes = $6, price = $7, enabled_for_enrollment = $8, max_assistance = $9, id_creator_user = $10
+            WHERE id = $11`,
+            [entity.name, entity.description, entity.id_event_category, entity.id_event_location, entity.start_date, entity.duration_in_minutes, entity.price, entity.enabled_for_enrollment, entity.max_assistance, entity.id_creator_user, entity.id]);
             return updated;
-        } catch (error) {
-            console.error("Error updating event:", error);
-            throw new Error("Could not update the event");
-        }
-    };
-    
+    }
+
     deleteByIdAsync = async (id) => 
     {
         return dbh.requestOne('DELETE FROM public.events WHERE id = $1', [id])

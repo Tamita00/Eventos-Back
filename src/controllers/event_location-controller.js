@@ -53,7 +53,7 @@ router.post('', mw.AuthMiddleware, async (req, res) => {
     }
 });
 
-router.put('', async(req, res) => {
+router.put('', mw.AuthMiddleware, async(req, res) => {
     try {
         const eventLocation = await svc.getByIdAsync(req.body.id);
         if (!req.body.id) {
