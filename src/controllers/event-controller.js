@@ -130,6 +130,7 @@ router.get('/enrollment/:id', async (req, res) =>{
 
 
 router.put('', async (req, res) => {
+    
     try {
         const event = await svc.getById(req.body.id);
         const eventLocation = await svc_el.getByIdAsync(req.body.id_event_location)
